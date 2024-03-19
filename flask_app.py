@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, session, send_file
+import random
 
 app = Flask(__name__)
 app.secret_key = 'a#130u#98bm_23j30_bas9'
@@ -17,12 +18,12 @@ def firstAPI():
     data = {'message': 'Hello, World!'}
     return jsonify(data)
 
-@app.route('/py/index')
+@app.route('/')
 def init_session():
     if not('ids' in session):
         session['ids'] = random.randint(0,int(1e10))
-    return send_file('../www/energie-experte-ck.de/index.html')
+    return render_template('index.html')
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000,debug=True)
