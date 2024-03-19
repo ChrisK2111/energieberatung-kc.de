@@ -1,0 +1,5 @@
+# Ordner
+__pycache__
+
+# Endungen
+*.pyc
