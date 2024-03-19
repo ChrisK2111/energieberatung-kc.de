@@ -6,7 +6,7 @@ app.secret_key = 'a#130u#98bm_23j30_bas9'
 @app.route('/mountain')
 def index():
     mountains = ['Everest', 'K2', 'Kilimanjaro']
-    return render_template('index.html', mountain=mountains)
+    return render_template('mountain.html', mountain=mountains)
 
 @app.route('/mountain/<mt>')
 def mountain(mt):
