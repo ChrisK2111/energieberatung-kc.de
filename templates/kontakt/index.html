@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+        <div class="py-5 text-center" id = "formHead">
+            <img class="d-block mx-auto mb-4" src="https://energie-experte-ck.de/img/Logo.png" alt="" width="57"
+                height="57">
+            <h2>Kontaktformular</h2>
+            <p class="lead" id ="formHeadText">Sie haben Fragen? Füllen Sie einfach das untere Kontaktformular aus und ich werde mich umgehend
+                bei Ihnen melden.</p>
+        </div>
+    
+        <div class="container-sm" id="formContainer">
+            <div class="row g-5">
+                <form class="needs-validation" novalidate="" id="kontaktformular">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">Vorname</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+                            <div class="invalid-feedback">
+                                Bitte geben Sie Ihren Vornamen an.
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Nachname</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
+                            <div class="invalid-feedback">
+                                Bitte geben Sie Ihren Nachnamen an.
+                            </div>
+                        </div>
+    
+    
+                        <div class="col-12">
+                            <label for="email" class="form-label">Email <span
+                                    class="text-body-secondary">(Optional)</span></label>
+                            <input type="email" class="form-control" id="email" placeholder="mustermann@mail.de">
+                            <div class="invalid-feedback">
+                                Bitte geben Sie Ihre Email-Adresse an.
+                            </div>
+                        </div>
+    
+                        <div class="col-12">
+                            <label for="city" class="form-label">Wohnort</label>
+                            <input type="text" class="form-control" id="city" placeholder="Stuttgart" required="">
+                            <div class="invalid-feedback">
+                                Bitte geben Sie Ihren Wohnort an.
+                            </div>
+                        </div>
+    
+                        <div class="col-12">
+                            <label for="address2" class="form-label">Address 2 <span
+                                    class="text-body-secondary">(Optional)</span></label>
+                            <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+                        </div>
+    
+                        <div class="col-12">
+                            <label for="message" class="form-label">Ihre Nachricht <span
+                                    class="text-body-secondary">(Optional)</span></label>
+                            <textarea class="form-control" id="message" rows="3"
+                                placeholder="Guten Tag, bitte kontaktieren Sie mich."></textarea>
+                        </div>
+    
+    
+    
+                        <hr class="my-4">
+                        
+                </form>
+                <!-- mit type="button" wird festgelegt, dass das Formular nicht direkt gesendet wird-->
+                <button type="submit" class="w-100 btn btn-primary" id="submitBtn">Abschicken</button>
+            </div>
+    
+        </div>
+
+        <div class="container-fluid p-0 my-4">
+        </div>
+    </main>
+    
+{% endblock %}
+

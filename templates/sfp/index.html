@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1> Sanierungsfahrplan</h1>
+
+    <div class="container-xl my-4">
+        <div class="card"
+        style="max-width: var(--wp--style--global--wide-size); margin-left: auto !important; margin-right: auto !important">
+        <h4 class="card-header" style="padding: 20px; ">
+            Eingabebereich
+        </h4>
+
+        <div class="card-body">
+
+            <div class="row" style="padding: 20px">
+                <div class="col">
+                    <p> Hier können Sie den Energiebedarf Ihres Gebäudes selbst bestimmen. Geben Sie hierzu die
+                        Eigenschaften Ihres Gebäudes ein und klicken Sie auf die Schaltfläche.
+                    </p>
+                    </p> Die Rechenergebnisse und Sanierungsvorschläge werden dann unten auf der Seite angezeigt.
+                    </p>
+                </div>
+
+                <div class="col">
+
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading_accordion_general">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse_accordion_general" aria-expanded="false"
+                                    aria-controls="collapse_accordion_general">
+                                    <div class="px-2">
+                                        <img src="https://energie-experte-ck.de/img/House_Basic.png"
+                                            alt="Icon" width="35">
+                                    </div>
+                                    Allgemeine Angaben
+                                </button>
+                            </h2>
+                            <div id="collapse_accordion_general" class="accordion-collapse collapse"
+                                aria-labelledby="heading_accordion_general" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-group">
+                                                <span class="input-group-text">m&sup2;</span>
+                                                <div class="form-floating">
+                                                    <input type="number" class="form-control"
+                                                        id="floatingInput_NetRoomArea" value=120 required>
+                                                    <label for="floatingInput_NetRoomArea">Wohnfläche</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group">
+                                                <div class="form-floating">
+                                                    <input type="number" class="form-control"
+                                                        id="floatingInput_ConstructionYear" value=1986 required>
+                                                    <label for="floatingInput_ConstructionYear">Baujahr</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <p></p>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-group">
+                                                <div class="form-floating">
+                                                    <select class="form-select form-select-sm"
+                                                        id="selection-buildingType"
+                                                        aria-label=".form-select-lg example">
+                                                        <option value="1">Freistehendes Gebäude</option>
+                                                        <option value="2">Reihenhaus (Mitte)</option>
+                                                        <option value="3">Reihenhaus (Rand)</option>
+                                                    </select>
+                                                    <label for="selection-buildingType">Art des Gebäudes</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group">
+                                                <div class="form-floating">
+                                                    <input type="number" class="form-control"
+                                                        id="floatingInput_NumOfStories" value=2 required>
+                                                    <label for="floatingInput_NumOfStories">Anzahl der
+                                                        Stockwerke</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading_accordion_basement">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse_accordion_basement" aria-expanded="false"
+                                    aria-controls="collapse_accordion_basement">
+                                    <div class="px-2">
+                                        <img src="https://energie-experte-ck.de/img/House_Basement.png"
+                                            alt="Icon" width="35">
+                                    </div>
+                                    Keller
+                                </button>
+                            </h2>
+                            <div id="collapse_accordion_basement" class="accordion-collapse collapse"
+                                aria-labelledby="heading_accordion_basement" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <select class="form-select form-select-sm" id="selection-basement"
+                                        aria-label=".form-select-lg example">
+                                        <option value="1">Kein Keller vorhanden</option>
+                                        <option value="2">Unbeheizter Keller</option>
+                                        <option value="3">Beheizter Keller</option>
+                                    </select>
+                                    <p></p>
+                                    <div class="form-check form-control-sm">
+                                        <input class="form-check-input" type="checkbox" value="1"
+                                            id="check-basementInsulation">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Kellerdecke bzw. Bodenplatte nachträglich gedämmt.
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading_accordion_extWalls">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse_accordion_extWalls" aria-expanded="false"
+                                    aria-controls="collapse_accordion_extWalls">
+                                    <div class="px-2">
+                                        <img src="https://energie-experte-ck.de/img/House_ExtWalls.png"
+                                            alt="Icon" width="35">
+                                    </div>
+                                    Außenwände
+                                </button>
+                            </h2>
+                            <div id="collapse_accordion_extWalls" class="accordion-collapse collapse"
+                                aria-labelledby="heading_accordion_extWalls" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <select class="form-select form-select-sm" id="selection-extWalls"
+                                        aria-label=".form-select-lg example">
+                                        <option value="1">Ursprungszustand der Fassade</option>
+                                        <option value="2">Nachträglich gedämmt (Dämmstärke weniger als 10cm)</option>
+                                        <option value="3">Nachträglich gedämmt (Dämmstärke mehr als 10cm)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading_accordion_windows">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse_accordion_windows" aria-expanded="false"
+                                    aria-controls="collapse_accordion_windows">
+                                    <div class="px-2">
+                                        <img src="https://energie-experte-ck.de/img/House_Window.png"
+                                            alt="Icon" width="35">
+                                    </div>
+                                    Fenster
+                                </button>
+                            </h2>
+                            <div id="collapse_accordion_windows" class="accordion-collapse collapse"
+                                aria-labelledby="heading_accordion_windows" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <select class="form-select form-select-sm" id="selection-windows"
+                                        aria-label=".form-select-lg example">
+                                        <option value="1">Ursprungszustand</option>
+                                        <option value="2">Nachräglich ausgetauscht (2-fach Verglasung)</option>
+                                        <option value="3">Nachräglich ausgetauscht (3-fach Verglasung)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading_accordion_heatingSystem">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse_accordion_heatingSystem" aria-expanded="false"
+                                    aria-controls="collapse_accordion_heatingSystem">
+                                    <div class="px-2">
+                                        <img src="https://energie-experte-ck.de/img/House_HeatingSystem.png"
+                                            alt="Icon" width="35">
+                                    </div>
+                                    Heizungssystem
+                                </button>
+                            </h2>
+                            <div id="collapse_accordion_heatingSystem" class="accordion-collapse collapse"
+                                aria-labelledby="heading_accordion_heatingSystem" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <select class="form-select form-select-sm" id="selection-heatingSystem"
+                                        aria-label=".form-select-lg example">
+                                        <option value="1">Gas oder Öl (bis 1985) </option>
+                                        <option value="2">Gas Niedertemperatur (1985 ... 2000) </option>
+                                        <option value="3">Gas Brennwert (nach 2000)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading_accordion_roof">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse_accordion_roof" aria-expanded="false"
+                                    aria-controls="collapse_accordion_roof">
+                                    <div class="px-2">
+                                        <img src="https://energie-experte-ck.de/img/House_Roof.png"
+                                            alt="Icon" width="35">
+                                    </div>
+                                    Dach
+                                </button>
+                            </h2>
+                            <div id="collapse_accordion_roof" class="accordion-collapse collapse"
+                                aria-labelledby="heading_accordion_roof" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <select class="form-select form-select-sm" id="selection-roof"
+                                        aria-label=".form-select-lg example">
+                                        <option value="1">Ursprungszustand</option>
+                                        <option value="2">Saniert und gedämmt</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row  align-self-center p-2">
+            <div class="col">
+                <button type="button" class="btn btn-outline-secondary" id="buttonSanierungsfahrplan"
+                    style="width: 300px; ">NEU BERECHNEN</button>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    
+    <div class="container-xl my-4">
+        <div class="card" style="max-width: var(--wp--style--global--wide-size); margin-left: auto !important; margin-right: auto !important">
+            <h4 class="card-header" style="padding: 20px; ">
+              Ausgangslage
+            </h4>
+          
+          <div class="card-body">
+          
+          <div class="row">
+            <div class="col" id="descriptionInitialConditionContainer">
+            </div>
+          <div class ="col">
+               <div class="chart-container" style="position: relative; height:300px; width: 100%">
+                  <canvas id="SfpEnergyEfficiencyChart" style="display: none"></canvas>
+                </div>
+          </div>
+          </div>
+          
+          </div>
+          </div>
+    </div>
+
+    <div class="container-xl my-4">
+        <div class="card" style="max-width: var(--wp--style--global--wide-size); margin-left: auto !important; margin-right: auto !important">
+            <h4 class="card-header" style="padding: 20px; ">
+              Sanierungsmaßnahmen
+            </h4>
+          
+          <div class="card-body">
+           <div class="row" style="padding: 20px">
+            <div class="row" id="graphContainter">
+             <div class ="col">
+               <div class="chart-container" style="position: relative; height:250px; width: 100%">
+                  <canvas id="sanierungsfahrplanChart" style="display: none"></canvas>
+                </div>
+          <p> </p>
+             </div>
+             <div class = "col" id="descriptionFinalConditionContainer">
+                
+             </div>
+          </div>
+          </div>
+          
+            <div class="row g-2" id="cardContainer" style="padding: 10px">
+            </div>
+           </div>
+          </div>
+    </div>
+
+
+
+{% endblock %}
