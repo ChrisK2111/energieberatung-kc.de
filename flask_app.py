@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, session, send_file
+from flask import Flask, render_template, jsonify, session, send_file, request
 import random
 
 app = Flask(__name__)
@@ -27,6 +27,12 @@ def init_session():
 @app.route('/sfp')
 def sfp():
     return render_template('sfp/index.html')
+
+@app.route('/sfp', methods=['POST'])
+def update_sfp():
+    print(1)
+    return render_template('sfp/index.html')
+
 
 @app.route('/kontakt')
 def kontakt():
