@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify, session, send_file, request
 import random
 import json
 from datetime import datetime
-from py.sfp_app import calc_sfp
+from py.sfp_app import calc_sfp, final_cond_card, sfp_cards, initial_cond_card
 
 
 app = Flask(__name__,static_url_path='',
@@ -40,17 +40,27 @@ def update_sfp():
                   'ids': session['ids']}
         for key in request.form.keys():
             sfp_form[key] = request.form.get(key)
+            session[key] = request.form.get(key);
 
         # JSON-String in JSON-Datei schreiben
         with open(file_path, 'a') as file:
             json.dump(sfp_form, file)
             file.write('\n')
         
+        
 
-        q_net = calc_sfp(sfp_form)
+        rf_data = calc_sfp(sfp_form)
+        txt_ini_card = initial_cond_card(rf_data)
+        txt_rf_card = final_cond_card(rf_data)
+        rf_cards = sfp_cards(rf_data)
 
-    return jsonify(q_net)
+    return render_template('sfp/index.html',navigation=txt_rf_card,cards=rf_cards)
 
+@app.route('/get_sfp_data', methods=['GET'])
+def send_sfp_data():
+    if request.method == 'GET':
+        rf_data = calc_sfp(session)
+    return jsonify(rf_data)
 
 @app.route('/kontakt')
 def kontakt():

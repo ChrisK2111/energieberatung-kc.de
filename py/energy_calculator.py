@@ -167,7 +167,8 @@ class EnvelopeComponent:
 
         return u_value
     
-    def get_installation_cost_euro(self):
+    @property
+    def installation_cost_euro(self):
         # Quellen: co2online.de
         # https://www.co2online.de/modernisieren-und-bauen/
 

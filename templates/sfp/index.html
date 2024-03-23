@@ -304,12 +304,45 @@
                         <p> </p>
                     </div>
                     <div class="col" id="descriptionFinalConditionContainer">
-
+                        {% for item in navigation %}
+                            <p>{{ item | safe }}</p>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
 
             <div class="row g-2" id="cardContainer" style="padding: 10px">
+                {% for card in cards %}
+                    <div class="col">
+                        <div class="card" style="min-width: 14rem; max-width: 18rem;">
+                            <h5 class="card-header" style="background: {{ card.color }}">{{ card.heading }}</h5>
+                            <div class="card-body">
+                                <p class="card-text">{{ card.text }}</p>
+                                <p class="card-text">Neue Effizienzklasse: <strong>{{ card.energy_class }}</strong></p>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 4px; border-bottom: 1px solid;">Energiekosten</td>
+                                            <td style="padding: 4px; border-bottom: 1px solid; text-align: right;">{{ card.energy_cost }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 4px; border-bottom: 1px solid;">Einsparungen</td>
+                                            <td style="padding: 4px; border-bottom: 1px solid; text-align: right;">{{ card.savings }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 4px; border-bottom: 1px solid;">Investition</td>
+                                            <td style="padding: 4px; border-bottom: 1px solid; text-align: right;">{{ card.invest }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 4px; border-bottom: 1px solid;">Förderung</td>
+                                            <td style="padding: 4px; border-bottom: 1px solid; text-align: right;">{{ card.support }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

@@ -36,11 +36,25 @@ document.addEventListener('DOMContentLoaded', function () {
 				method: 'POST',
 				body: formData
 			})
+			.then(response => {
+				// Überprüfen, ob die Anfrage erfolgreich war
+				if (!response.ok) {
+					throw new Error('Serverfehler: ' + response.status);
+				}
+				// Die HTML-Seite als Text extrahieren
+				return response.text();
+			})
+			.then(html => {
+				// Die HTML-Seite im Browser anzeigen
+				document.body.innerHTML = html;
+				// GET-Anfrage senden, nachdem die Seite geladen wurde
+				return fetch('/get_sfp_data'); // Diese Route gibt den JSON-String zurück
+			})
 			.then(response => response.json())
 			.then(data => {
 				// Verarbeite die JSON-Antwort hier
 				plotSfp(data);
-				populateInitialConditionCard(data)
+				plotSfpRetrofitChart(data)
 			})
 			.catch(error => {
 				console.error('Fehler beim Senden des Formulars:', error);
@@ -185,6 +199,105 @@ function populateInitialConditionCard(rfData){
 
 }
 
+function plotSfpRetrofitChart(rfData){
+	var qData  = [];
+	var rgbData = [];
+	var labels = [];
+	var idRf = 'Ist';
+
+	for (yr = 0; yr < rfData.length; yr++) {
+		if (rfData[yr].retrofit_cost > 0 || yr === 0) {
+			let q = rfData[yr].primary_energy_demand;
+			qData.push(q);
+			rgbData.push(
+				'rgba(' + getRGBofDemand(q).join(', ') + ', 0.9)'
+				);
+			labels.push(idRf);
+			if (idRf==='Ist'){
+				idRf = 0;
+			}
+			idRf += 1;
+		}
+	}
+
+	var data = {
+		labels: labels,
+		datasets: [{
+			label: "Primärenergiebedarf",
+			data: qData,
+			backgroundColor: rgbData
+		}]
+	}
+
+	if (typeof sfpChart !== 'undefined') { // Überprüfen, ob das Diagramm vorhanden ist, bevor es zerstört wird
+		sfpChart.destroy();
+	}
+	var grapharea = document.getElementById('sanierungsfahrplanChart')
+
+	grapharea.style.display = '';
+
+	var config = {
+		type: 'bar',
+		data: data,
+		options: {
+			devicePixelRatio: 4,
+			responsive: true,
+			maintainAspectRatio: false,
+			scales: {
+				y: {
+					title: {
+						display: true,
+						text: 'Energie in kWh/(m\u00B2a)'
+					},
+				},
+				x: {
+					title: {
+						display: true,
+						text: 'Maßnahme',
+					}
+				}
+			},
+			plugins: {
+				legend: {
+					display: false
+				},
+				tooltip: {
+					callbacks: {
+						label: function(context) {
+							let label = context.dataset.label || '';
+	
+							if (label) {
+								label += ': ';
+							}
+							if (context.parsed.y !== null) {
+								label += Math.round(context.parsed.y);
+							}
+							return label;
+						},
+						title: function(context) {
+							let title = context[0].label || '';
+	
+							if (title!=='Ist') {
+								title = 'Maßnahme: ' + title;
+							}
+							return title;
+						}
+					}
+				}
+			}
+		}
+	};
+
+
+	
+
+	sfpChart = new Chart(grapharea, config
+	);
+
+
+	return data;
+}
+
 function getEnergyClass(demand){
 	let eClass = "";
 	for (ii=0;ii<colorCodes.length;ii++) {
@@ -194,4 +307,28 @@ function getEnergyClass(demand){
 		}
 	}
 	return eClass;
+}
+
+function getRGBofDemand(demand) {
+	var rgbValues = [200, 200, 200];
+	// Neue RGB-Werte definieren (z.B. 255, 0, 0 für Rot)
+	// lineare interpolation zwischen zwei Werten
+	for (jCode = 0; jCode < colorCodes.length; jCode++) {
+		if (demand <= colorCodes[jCode].qp) {
+			let ratio = 1;
+			let rgb1 = colorCodes[jCode].rgb;
+			let rgb2 = colorCodes[jCode].rgb;
+			if (jCode !== 0) {
+				rgb2 = colorCodes[jCode - 1].rgb
+				ratio = (demand - colorCodes[jCode].qp) / (colorCodes[jCode - 1].qp - colorCodes[jCode].qp);
+			}
+
+			rgbValues = rgb1.map(function (element, index) {
+				return element + (rgb2[index] - element) * ratio;
+			})
+
+			break
+		}
+	}
+	return rgbValues; 
 }
