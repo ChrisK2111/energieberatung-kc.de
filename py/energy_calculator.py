@@ -278,6 +278,19 @@ weather_data = [
     {"month": "Dez", "temperature": 0.9, "solar_radiation": 17}
 ]
 
+description_initial_condition = [
+    {"qp": 30, "text": ["Ihr Gebäude erfüllt die fortschrittlichsten energetischen Standards. Glückwunsch!"]},
+    {"qp": 60, "text": ["Ihr Gebäude erfüllt die aktuell geltenden Anforderungen an Neubauten. Glückwunsch!"]},
+    {"qp": 90, "text": ["Ihr Gebäude erfüllt die Anforderungen an Neubauten aus dem Jahr 2002."]},
+    {"qp": 130, "text": ["Die energetische Eigenschaften ihres Gebäudes sind überdurchschnittlich gut, bieten aber dennoch ein großes Einsparpotential."]},
+    {"qp": 180, "text": ["Der Energieverbrauch Ihres Gebäudes ist überdurchschnittlich groß.",
+                         "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]},
+    {"qp": 230, "text": ["Der Energieverbrauch Ihres Gebäudes ist überdurchschnittlich groß.",
+                         "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]},
+    {"qp": 999, "text": ["Der Energieverbrauch Ihres Gebäudes ist außerordentlich groß.",
+                         "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]}
+]
+
 
 if __name__ == "__main__":
     building = Building(1990,120,2,0,3)
