@@ -10,6 +10,19 @@ const colorCodes = [
 	{ qp: 999, class:  "H", rgb:  [177,16,22], description: "Teilsaniertes oder unsaniertes Gebäude"}
 ];
 
+const descriptionInitialCondition = [
+	{qp:  30, text: ["Ihr Gebäude erfüllt die fortschrittlichsten energetischen Standards.  Glückwunsch!"]},
+	{qp:  60, text: ["Ihr Gebäude erfüllt die aktuell geltenden Anforderungen an Neubauten. Glückwunsch!"]},
+	{qp:  90, text: ["Ihr Gebäude erfüllt die Anforderungen an Neubauten aus dem Jahr 2002."]},
+	{qp: 130, text: ["Die energetische Eigenschaften ihres Gebäudes sind überdurchschnittlich gut, bieten aber dennoch ein großes Einsparpotential."]},
+	{qp: 180, text: ["Der Energieverbrauch Ihres Gebäudes ist überdurchschnittlich groß.",
+					"Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]},
+	{qp: 230, text: ["Der Energieverbrauch Ihres Gebäudes ist überdurchschnittlich groß.",
+					 "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]},
+	{qp: 999, text: ["Der Energieverbrauch Ihres Gebäudes ist außerordentlich groß.",
+					 "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]}
+]
+
 document.addEventListener('DOMContentLoaded', function () {
 	if (window.location.pathname === '/sfp'){
 		document.getElementById('sfpForm').addEventListener('submit', function(event) {
@@ -27,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			.then(data => {
 				// Verarbeite die JSON-Antwort hier
 				plotSfp(data);
+				populateInitialConditionCard(data)
 			})
 			.catch(error => {
 				console.error('Fehler beim Senden des Formulars:', error);
@@ -40,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function plotSfp(primaryEnergyDemand) {
 
-	let q0Building = primaryEnergyDemand['heating_demand'];
+	let q0Building = primaryEnergyDemand[0]['heating_demand'];
 
 	if (typeof sfpEClassChart !== 'undefined') { // Überprüfen, ob das Diagramm vorhanden ist, bevor es zerstört wird
 		sfpEClassChart.destroy();
@@ -134,4 +148,50 @@ function plotSfp(primaryEnergyDemand) {
 	  sfpEClassChart.update();
 
 
+}
+
+function populateInitialConditionCard(rfData){
+	let container = document.getElementById("descriptionInitialConditionContainer");
+
+	let demand0   = Math.round(rfData[0]['primary_energy_demand']);
+	let demandEnd = Math.round(rfData[rfData.length - 1]['primary_energy_demand']);
+	let p1 = document.createElement('p');
+	let p2 = document.createElement('p');
+	let description = "";
+	let eClass = getEnergyClass(demand0);
+	let cost = Math.round(rfData[0]['energy_cost']  / 10) * 10;
+	let savings = Math.round((rfData[0]['energy_cost'] - rfData[rfData.length - 1]['energy_cost']) / 10) * 10;
+
+
+
+	for (ii=0;ii<descriptionInitialCondition.length;ii++) {
+		if (demand0 <= descriptionInitialCondition[ii].qp){
+			description = descriptionInitialCondition[ii].text.join(' ');
+			break
+		}
+	}
+
+
+	// Löscht alle Kinder des Containers
+    container.innerHTML = '';
+
+	p1.textContent = description;
+	container.appendChild(p1)
+
+	p2.innerHTML = "Der rechnerische Endenergiebedarf Ihres Gebäudes beträgt " + 
+					'<span style="white-space: nowrap">'+demand0 + ' kWh/(m\u00B2a). </span>' + "<br>" +
+					"Damit erfüllt Ihr Gebäude die Anforderungen der Energieeffizienzklasse <strong>" + eClass +"</strong>.";
+	container.appendChild(p2)
+
+}
+
+function getEnergyClass(demand){
+	let eClass = "";
+	for (ii=0;ii<colorCodes.length;ii++) {
+		if (demand <= colorCodes[ii].qp){
+			eClass = colorCodes[ii].class;
+			break
+		}
+	}
+	return eClass;
 }
