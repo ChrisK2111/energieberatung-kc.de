@@ -5,3 +5,6 @@ vigor
 
 # Endungen
 *.pyc
+
+# Dateien
+data.json
