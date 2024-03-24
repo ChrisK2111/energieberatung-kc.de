@@ -18,3 +18,16 @@ color_codes = [
     {"qp": 250, "class": "G", "rgb": [177, 16, 22], "description": "Teilsaniertes oder unsaniertes Gebäude"},
     {"qp": 999, "class": "H", "rgb": [177, 16, 22], "description": "Teilsaniertes oder unsaniertes Gebäude"}
 ]
+
+description_initial_condition = [
+    {"qp": 30, "text": ["Ihr Gebäude erfüllt die fortschrittlichsten energetischen Standards.  Glückwunsch!"]},
+    {"qp": 60, "text": ["Ihr Gebäude erfüllt die aktuell geltenden Anforderungen an Neubauten. Glückwunsch!"]},
+    {"qp": 90, "text": ["Ihr Gebäude erfüllt die Anforderungen an Neubauten aus dem Jahr 2002."]},
+    {"qp": 130, "text": ["Die energetische Eigenschaften ihres Gebäudes sind überdurchschnittlich gut, bieten aber dennoch ein großes Einsparpotential."]},
+    {"qp": 180, "text": ["Der Energieverbrauch Ihres Gebäudes ist überdurchschnittlich groß.",
+                         "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]},
+    {"qp": 230, "text": ["Der Energieverbrauch Ihres Gebäudes ist überdurchschnittlich groß.",
+                         "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]},
+    {"qp": 999, "text": ["Der Energieverbrauch Ihres Gebäudes ist außerordentlich groß.",
+                         "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]}
+]

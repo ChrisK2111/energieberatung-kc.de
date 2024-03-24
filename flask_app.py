@@ -10,12 +10,12 @@ app = Flask(__name__,static_url_path='',
 app.secret_key = 'a#130u#98bm_23j30_bas9'
 
 @app.route('/mountain')
-def index():
+def mountain():
     mountains = ['Everest', 'K2', 'Kilimanjaro']
     return render_template('mountain.html', mountain=mountains)
 
 @app.route('/mountain/<mt>')
-def mountain(mt):
+def specific_mountain(mt):
     return "This is a big mountain: " + str(mt)
 
 @app.route('/py/firstAPI')
@@ -24,49 +24,62 @@ def firstAPI():
     return jsonify(data)
 
 @app.route('/')
-def init_session():
-    if not('ids' in session):
-        session['ids'] = random.randint(0,int(1e10))
+def index():
+    init_session()
     return render_template('index.html')
 
 @app.route('/sfp')
 def sfp():
-    return render_template('sfp/index.html')
+    init_session()
+    if 'button_clicked' in session:
+        rf_data = calc_sfp(session)
+        txt_ini_card = initial_cond_card(rf_data)
+        txt_final_card = final_cond_card(rf_data)
+        rf_cards = sfp_cards(rf_data)
+        t = render_template('sfp/index.html',session=session, txt_ini_card=txt_ini_card, txt_final_card=txt_final_card,cards=rf_cards)
+    else:
+        t = render_template('sfp/index.html',session=session);
+    return t
 
 @app.route('/sfp', methods=['POST'])
 def update_sfp():
     if request.method == 'POST':
-        sfp_form = {'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                  'ids': session['ids']}
+        session['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        session['button_clicked'] = True
+        if 'check_basementInsulation' in session:
+            session.pop('check_basementInsulation')
         for key in request.form.keys():
-            sfp_form[key] = request.form.get(key)
             session[key] = request.form.get(key);
 
         # JSON-String in JSON-Datei schreiben
         with open(file_path, 'a') as file:
-            json.dump(sfp_form, file)
+            json.dump(session, file)
             file.write('\n')
         
-        
-
-        rf_data = calc_sfp(sfp_form)
+        rf_data = calc_sfp(session)
         txt_ini_card = initial_cond_card(rf_data)
-        txt_rf_card = final_cond_card(rf_data)
+        txt_final_card = final_cond_card(rf_data)
         rf_cards = sfp_cards(rf_data)
 
-    return render_template('sfp/index.html',navigation=txt_rf_card,cards=rf_cards)
+    return render_template('sfp/index.html',session=session, txt_ini_card=txt_ini_card, txt_final_card=txt_final_card,cards=rf_cards)
 
 @app.route('/get_sfp_data', methods=['GET'])
 def send_sfp_data():
     if request.method == 'GET':
-        rf_data = calc_sfp(session)
+        if 'button_clicked' in session.keys():
+            rf_data = calc_sfp(session)
+        else:
+            rf_data = None
     return jsonify(rf_data)
 
 @app.route('/kontakt')
 def kontakt():
     return render_template('kontakt/index.html')
 
-
+def init_session():
+    if not('ids' in session):
+        session['ids'] = random.randint(0,int(1e10))
+    return True
 
 file_path = 'data.json'
 

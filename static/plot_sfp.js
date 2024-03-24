@@ -1,69 +1,32 @@
 const colorCodes = [
-	{ qp:  30, class: "A+", rgb:   [0,166,80], description: "Fortschrittlicher Standard"},
-	{ qp:  50, class:  "A", rgb:  [53,178,75], description: "Gesetzliche Anforderung an Neubauten"},
-	{ qp:  75, class:  "B", rgb: [134,199,59], description: "Gesetzliche Anforderung an Neubauten (Stand 2002)"},
-	{ qp: 100, class:  "C", rgb: [207,222,35], description: "Teilsaniertes Gebäude"},
-	{ qp: 130, class:  "D", rgb:  [255,241,0], description: "Teilsaniertes oder unsaniertes Gebäude"},
-	{ qp: 160, class:  "E", rgb: [254,207,11], description: "Teilsaniertes oder unsaniertes Gebäude"},
-	{ qp: 200, class:  "F", rgb: [246,117,26], description: "Teilsaniertes oder unsaniertes Gebäude"},
-	{ qp: 250, class:  "G", rgb:  [177,16,22], description: "Teilsaniertes oder unsaniertes Gebäude"},
-	{ qp: 999, class:  "H", rgb:  [177,16,22], description: "Teilsaniertes oder unsaniertes Gebäude"}
-];
+	{ qp:  30, class: "A+", rgb:   [0,166,80]},
+	{ qp:  50, class:  "A", rgb:  [53,178,75]},
+	{ qp:  75, class:  "B", rgb: [134,199,59]},
+	{ qp: 100, class:  "C", rgb: [207,222,35]}, 
+	{ qp: 130, class:  "D", rgb:  [255,241,0]},
+	{ qp: 160, class:  "E", rgb: [254,207,11]},
+	{ qp: 200, class:  "F", rgb: [246,117,26]},
+	{ qp: 250, class:  "G", rgb:  [177,16,22]},
+	{ qp: 999, class:  "H", rgb:  [177,16,22]}
+	];
 
-const descriptionInitialCondition = [
-	{qp:  30, text: ["Ihr Gebäude erfüllt die fortschrittlichsten energetischen Standards.  Glückwunsch!"]},
-	{qp:  60, text: ["Ihr Gebäude erfüllt die aktuell geltenden Anforderungen an Neubauten. Glückwunsch!"]},
-	{qp:  90, text: ["Ihr Gebäude erfüllt die Anforderungen an Neubauten aus dem Jahr 2002."]},
-	{qp: 130, text: ["Die energetische Eigenschaften ihres Gebäudes sind überdurchschnittlich gut, bieten aber dennoch ein großes Einsparpotential."]},
-	{qp: 180, text: ["Der Energieverbrauch Ihres Gebäudes ist überdurchschnittlich groß.",
-					"Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]},
-	{qp: 230, text: ["Der Energieverbrauch Ihres Gebäudes ist überdurchschnittlich groß.",
-					 "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]},
-	{qp: 999, text: ["Der Energieverbrauch Ihres Gebäudes ist außerordentlich groß.",
-					 "Eine energetische Sanierung lohnt sich in Ihrem Fall besonders, da Sie Ihre Energiekosten erheblich senken können."]}
-]
 
 document.addEventListener('DOMContentLoaded', function () {
-	if (window.location.pathname === '/sfp'){
-		document.getElementById('sfpForm').addEventListener('submit', function(event) {
-			event.preventDefault(); // Standardformularverhalten unterdrücken
-		
-			// Formulardaten als FormData-Objekt sammeln
-			const formData = new FormData(this);
-		
-			// POST-Anfrage an die Flask-Route senden
-			fetch('/sfp', {
-				method: 'POST',
-				body: formData
-			})
-			.then(response => {
-				// Überprüfen, ob die Anfrage erfolgreich war
-				if (!response.ok) {
-					throw new Error('Serverfehler: ' + response.status);
-				}
-				// Die HTML-Seite als Text extrahieren
-				return response.text();
-			})
-			.then(html => {
-				// Die HTML-Seite im Browser anzeigen
-				document.body.innerHTML = html;
-				// GET-Anfrage senden, nachdem die Seite geladen wurde
-				return fetch('/get_sfp_data'); // Diese Route gibt den JSON-String zurück
-			})
+	if (window.location.pathname === '/sfp') {
+		fetch('/get_sfp_data')
 			.then(response => response.json())
 			.then(data => {
 				// Verarbeite die JSON-Antwort hier
-				plotSfp(data);
-				plotSfpRetrofitChart(data)
+				if (data !== null){
+					plotSfp(data);
+					plotSfpRetrofitChart(data)
+				}
 			})
 			.catch(error => {
-				console.error('Fehler beim Senden des Formulars:', error);
+				console.error('Fehler beim Empfangen der sfp-daten', error);
 			});
-		});
 	};
 });
-
-
 
 
 function plotSfp(primaryEnergyDemand) {
@@ -164,41 +127,6 @@ function plotSfp(primaryEnergyDemand) {
 
 }
 
-function populateInitialConditionCard(rfData){
-	let container = document.getElementById("descriptionInitialConditionContainer");
-
-	let demand0   = Math.round(rfData[0]['primary_energy_demand']);
-	let demandEnd = Math.round(rfData[rfData.length - 1]['primary_energy_demand']);
-	let p1 = document.createElement('p');
-	let p2 = document.createElement('p');
-	let description = "";
-	let eClass = getEnergyClass(demand0);
-	let cost = Math.round(rfData[0]['energy_cost']  / 10) * 10;
-	let savings = Math.round((rfData[0]['energy_cost'] - rfData[rfData.length - 1]['energy_cost']) / 10) * 10;
-
-
-
-	for (ii=0;ii<descriptionInitialCondition.length;ii++) {
-		if (demand0 <= descriptionInitialCondition[ii].qp){
-			description = descriptionInitialCondition[ii].text.join(' ');
-			break
-		}
-	}
-
-
-	// Löscht alle Kinder des Containers
-    container.innerHTML = '';
-
-	p1.textContent = description;
-	container.appendChild(p1)
-
-	p2.innerHTML = "Der rechnerische Endenergiebedarf Ihres Gebäudes beträgt " + 
-					'<span style="white-space: nowrap">'+demand0 + ' kWh/(m\u00B2a). </span>' + "<br>" +
-					"Damit erfüllt Ihr Gebäude die Anforderungen der Energieeffizienzklasse <strong>" + eClass +"</strong>.";
-	container.appendChild(p2)
-
-}
-
 function plotSfpRetrofitChart(rfData){
 	var qData  = [];
 	var rgbData = [];
@@ -296,17 +224,6 @@ function plotSfpRetrofitChart(rfData){
 
 
 	return data;
-}
-
-function getEnergyClass(demand){
-	let eClass = "";
-	for (ii=0;ii<colorCodes.length;ii++) {
-		if (demand <= colorCodes[ii].qp){
-			eClass = colorCodes[ii].class;
-			break
-		}
-	}
-	return eClass;
 }
 
 function getRGBofDemand(demand) {

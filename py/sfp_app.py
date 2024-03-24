@@ -1,19 +1,19 @@
 from .energy_calculator import Building, weather_data
-from . import retrofit_order, color_codes
+from . import retrofit_order, color_codes, description_initial_condition
 
 
 def calc_sfp(sfp_form):
     yr = int(sfp_form['floatingInput_ConstructionYear']);
     a_nra = int(sfp_form['floatingInput_NetRoomArea'])
-    if sfp_form['selection-buildingType'] == '2':
+    if sfp_form['selection_buildingType'] == '2':
         ext_wall_count = 3;
-    elif sfp_form['selection-buildingType'] == '3':
+    elif sfp_form['selection_buildingType'] == '3':
         ext_wall_count = 2;
     else:
         ext_wall_count = 4;
     floor_count = int(sfp_form['floatingInput_NumOfStories'])
 
-    if sfp_form['selection-basement'] == '2' or sfp_form['selection-basement'] == '3':
+    if sfp_form['selection_basement'] == '2' or sfp_form['selection_basement'] == '3':
         ug_floor_count = 1;
     else:
         ug_floor_count = 0;
@@ -32,11 +32,11 @@ def calc_sfp(sfp_form):
 def get_completed_retrofit_measures(sfp_form):
 
     year_of_constr  = float(sfp_form['floatingInput_ConstructionYear'])
-    rf_ext_walls    = float(sfp_form['selection-extWalls'])
-    rf_windows      = float(sfp_form['selection-windows'])
-    rf_heat_sys     = float(sfp_form['selection-heatingSystem'])
-    rf_roof         = float(sfp_form['selection-roof'])
-    rf_basement     = sfp_form.get('check-basementInsulation', False)
+    rf_ext_walls    = float(sfp_form['selection_extWalls'])
+    rf_windows      = float(sfp_form['selection_windows'])
+    rf_heat_sys     = float(sfp_form['selection_heatingSystem'])
+    rf_roof         = float(sfp_form['selection_roof'])
+    rf_basement     = sfp_form.get('check_basementInsulation', False)
 
     rf = []
 
@@ -152,12 +152,29 @@ def calc_renovation(building: Building, weather_data):
     return rf_data
 
 def initial_cond_card(rf_data):
-    return 1
+    demand_0 = rf_data[0]['primary_energy_demand']
+    demand_0 = round(demand_0)
+    energy_class = get_energy_class(rf_data[0]['primary_energy_demand'])
+
+    for item in description_initial_condition:
+            if demand_0 <= item['qp']:
+                description = ' '.join(item['text'])
+                break
+    text= [  
+        description,
+        "Der rechnerische Endenergiebedarf Ihres Gebäudes beträgt " + '<span style="white-space: nowrap">' + str(demand_0) + ' kWh/(m\u00B2a). </span>',
+        "Damit erfüllt Ihr saniertes Gebäude die Anforderungen der Energieeffizienzklasse <strong>" + energy_class + "</strong>.",
+        ]
+
+    return text
 
 def final_cond_card(rf_data):
     demand_end = rf_data[-1]['primary_energy_demand']
-    savings = round((rf_data[-1]['energy_cost'] - rf_data[0]['energy_cost'])/10)*10
-    energy_class = get_energy_class(rf_data[0]['primary_energy_demand'])
+    demand_end = round(demand_end)
+    savings = round((rf_data[0]['energy_cost'] - rf_data[-1]['energy_cost'])/10)*10
+    energy_class = get_energy_class(rf_data[-1]['primary_energy_demand'])
+
+    
 
     text_list = [  
         "Durch eine energetische Sanierung können Sie den rechnerischen Endenergiebedarf Ihres Gebäudes auf " +
@@ -167,7 +184,8 @@ def final_cond_card(rf_data):
     
         "Gleichzeitig senken Sie Ihre Energiekosten und Sie können bis zu <strong>" +
         format_number_with_thousand_dots(savings) + " € </strong> pro Jahr einsparen."
-]
+        ]
+    
 
     return text_list
 

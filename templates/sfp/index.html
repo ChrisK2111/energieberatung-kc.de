@@ -50,7 +50,7 @@
                                                     <span class="input-group-text">m&sup2;</span>
                                                     <div class="form-floating">
                                                         <input type="number" class="form-control"
-                                                            id="floatingInput_NetRoomArea" name="floatingInput_NetRoomArea" value=120 required>
+                                                            id="floatingInput_NetRoomArea" name="floatingInput_NetRoomArea" value= "{{ session.floatingInput_NetRoomArea | default(120)}}" required>
                                                         <label for="floatingInput_NetRoomArea">Wohnfläche</label>
                                                     </div>
                                                 </div>
@@ -59,7 +59,7 @@
                                                 <div class="input-group">
                                                     <div class="form-floating">
                                                         <input type="number" class="form-control"
-                                                            id="floatingInput_ConstructionYear" name="floatingInput_ConstructionYear" value=1986 required>
+                                                            id="floatingInput_ConstructionYear" name="floatingInput_ConstructionYear" value= "{{ session.floatingInput_ConstructionYear | default(1985)}}" required>
                                                         <label for="floatingInput_ConstructionYear">Baujahr</label>
                                                     </div>
                                                 </div>
@@ -72,14 +72,14 @@
                                                 <div class="input-group">
                                                     <div class="form-floating">
                                                         <select class="form-select form-select-sm"
-                                                            id="selection-buildingType"
-                                                            name="selection-buildingType"
+                                                            id="selection_buildingType"
+                                                            name="selection_buildingType"
                                                             aria-label=".form-select-lg example">
-                                                            <option value="1">Freistehendes Gebäude</option>
-                                                            <option value="2">Reihenhaus (Mitte)</option>
-                                                            <option value="3">Reihenhaus (Rand)</option>
+                                                            <option value="1" {% if session.selection_buildingType == '1' %} selected {% endif %}> Freistehendes Gebäude</option>
+                                                            <option value="2" {% if session.selection_buildingType == '2' %} selected {% endif %}> Reihenhaus (Mitte)</option>
+                                                            <option value="3" {% if session.selection_buildingType == '3' %} selected {% endif %}> Reihenhaus (Rand)</option>
                                                         </select>
-                                                        <label for="selection-buildingType">Art des Gebäudes</label>
+                                                        <label for="selection_buildingType">Art des Gebäudes</label>
                                                     </div>
                                                 </div>
 
@@ -89,7 +89,7 @@
                                                     <div class="form-floating">
                                                         <input type="number" class="form-control"
                                                             id="floatingInput_NumOfStories"
-                                                            name="floatingInput_NumOfStories" value=2 required>
+                                                            name="floatingInput_NumOfStories" value= "{{ session.floatingInput_NumOfStories | default(2)}}"  required>
                                                         <label for="floatingInput_NumOfStories">Anzahl der
                                                             Stockwerke</label>
                                                     </div>
@@ -119,18 +119,18 @@
                                 <div id="collapse_accordion_basement" class="accordion-collapse collapse"
                                     aria-labelledby="heading_accordion_basement" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
-                                        <select class="form-select form-select-sm" id="selection-basement"
-                                            name="selection-basement"
+                                        <select class="form-select form-select-sm" id="selection_basement"
+                                            name="selection_basement"
                                             aria-label=".form-select-lg example">
-                                            <option value="1">Kein Keller vorhanden</option>
-                                            <option value="2">Unbeheizter Keller</option>
-                                            <option value="3">Beheizter Keller</option>
+                                            <option value="1" {% if session.selection_basement == '1' %} selected {% endif %} >Kein Keller vorhanden</option>
+                                            <option value="2" {% if session.selection_basement == '2' %} selected {% endif %} >Unbeheizter Keller</option>
+                                            <option value="3" {% if session.selection_basement == '3' %} selected {% endif %} >Beheizter Keller</option>
                                         </select>
                                         <p></p>
                                         <div class="form-check form-control-sm">
-                                            <input class="form-check-input" type="checkbox" value="1"
-                                                id="check-basementInsulation"
-                                                name="check-basementInsulation">
+                                            <input class="form-check-input" type="checkbox" {% if session.check_basementInsulation %} checked {% endif %}
+                                                id="check_basementInsulation"
+                                                name="check_basementInsulation">
                                             <label class="form-check-label" for="flexCheckDefault">
                                                 Kellerdecke bzw. Bodenplatte nachträglich gedämmt.
                                             </label>
@@ -156,12 +156,11 @@
                                 <div id="collapse_accordion_extWalls" class="accordion-collapse collapse"
                                     aria-labelledby="heading_accordion_extWalls" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
-                                        <select class="form-select form-select-sm" id="selection-extWalls" name="selection-extWalls"
+                                        <select class="form-select form-select-sm" id="selection_extWalls" name="selection_extWalls"
                                             aria-label=".form-select-lg example">
-                                            <option value="1">Ursprungszustand der Fassade</option>
-                                            <option value="2">Nachträglich gedämmt (Dämmstärke weniger als 10cm)
-                                            </option>
-                                            <option value="3">Nachträglich gedämmt (Dämmstärke mehr als 10cm)</option>
+                                            <option value="1" {% if session.selection_extWalls == '1' %} selected {% endif %}>Ursprungszustand der Fassade</option>
+                                            <option value="2" {% if session.selection_extWalls == '2' %} selected {% endif %}>Nachträglich gedämmt (Dämmstärke weniger als 10cm)</option>
+                                            <option value="3" {% if session.selection_extWalls == '3' %} selected {% endif %}>Nachträglich gedämmt (Dämmstärke mehr als 10cm)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -182,11 +181,11 @@
                                 <div id="collapse_accordion_windows" class="accordion-collapse collapse"
                                     aria-labelledby="heading_accordion_windows" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
-                                        <select class="form-select form-select-sm" id="selection-windows" name="selection-windows"
+                                        <select class="form-select form-select-sm" id="selection_windows" name="selection_windows"
                                             aria-label=".form-select-lg example">
-                                            <option value="1">Ursprungszustand</option>
-                                            <option value="2">Nachräglich ausgetauscht (2-fach Verglasung)</option>
-                                            <option value="3">Nachräglich ausgetauscht (3-fach Verglasung)</option>
+                                            <option value="1" {% if session.selection_windows == '1' %} selected {% endif %}>Ursprungszustand</option>
+                                            <option value="2" {% if session.selection_windows == '2' %} selected {% endif %}>Nachräglich ausgetauscht (2-fach Verglasung)</option>
+                                            <option value="3" {% if session.selection_windows == '3' %} selected {% endif %}>Nachräglich ausgetauscht (3-fach Verglasung)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -208,11 +207,11 @@
                                     aria-labelledby="heading_accordion_heatingSystem"
                                     data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
-                                        <select class="form-select form-select-sm" id="selection-heatingSystem" name="selection-heatingSystem"
+                                        <select class="form-select form-select-sm" id="selection_heatingSystem" name="selection_heatingSystem"
                                             aria-label=".form-select-lg example">
-                                            <option value="1">Gas oder Öl (bis 1985) </option>
-                                            <option value="2">Gas Niedertemperatur (1985 ... 2000) </option>
-                                            <option value="3">Gas Brennwert (nach 2000)</option>
+                                            <option value="1" {% if session.selection_heatingSystem == '1' %} selected {% endif %}>Gas oder Öl (bis 1985) </option>
+                                            <option value="2" {% if session.selection_heatingSystem == '2' %} selected {% endif %}>Gas Niedertemperatur (1985 ... 2000) </option>
+                                            <option value="3" {% if session.selection_heatingSystem == '3' %} selected {% endif %}>Gas Brennwert (nach 2000)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -233,10 +232,10 @@
                                 <div id="collapse_accordion_roof" class="accordion-collapse collapse"
                                     aria-labelledby="heading_accordion_roof" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
-                                        <select class="form-select form-select-sm" id="selection-roof" name="selection-roof"
+                                        <select class="form-select form-select-sm" id="selection_roof" name="selection_roof"
                                             aria-label=".form-select-lg example">
-                                            <option value="1">Ursprungszustand</option>
-                                            <option value="2">Saniert und gedämmt</option>
+                                            <option value="1" {% if session.selection_roof == '1' %} selected {% endif %}>Ursprungszustand</option>
+                                            <option value="2" {% if session.selection_roof == '2' %} selected {% endif %}>Saniert und gedämmt</option>
                                         </select>
                                     </div>
                                 </div>
@@ -275,6 +274,9 @@
 
             <div class="row">
                 <div class="col" id="descriptionInitialConditionContainer">
+                    {% for item in txt_ini_card %}
+                            <p>{{ item | safe }}</p>
+                        {% endfor %}
                 </div>
                 <div class="col">
                     <div class="chart-container" style="position: relative; height:300px; width: 100%">
@@ -304,7 +306,7 @@
                         <p> </p>
                     </div>
                     <div class="col" id="descriptionFinalConditionContainer">
-                        {% for item in navigation %}
+                        {% for item in txt_final_card %}
                             <p>{{ item | safe }}</p>
                         {% endfor %}
                     </div>
