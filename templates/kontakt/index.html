@@ -2,8 +2,12 @@
 
 {% extends 'base.html' %}
 
-{% block content %}
+{% block js_scripts %}
+    <script src="{{ url_for('static', filename='submit.js') }}"></script>
+{% endblock %}
 
+{% block content %}
+        
 
         <div class="py-5 text-center" id = "formHead">
             <img class="d-block mx-auto mb-4" src="https://energie-experte-ck.de/img/Logo.png" alt="" width="57"

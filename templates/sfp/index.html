@@ -2,6 +2,10 @@
 
 {% extends 'base.html' %}
 
+{% block js_scripts %}
+    <script src="{{ url_for('static', filename='plot_sfp.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 
 <h1> Sanierungsfahrplan</h1>
