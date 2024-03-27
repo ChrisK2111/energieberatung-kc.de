@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html>
 
-<head>
-    <!--#include file="/includes/head.html" -->
-    <title> Nachricht erfolgreich verschickt.</title>
-</head>
+{% extends 'base.html' %}
 
-<body>
-    <main>
+
+{% block content %}
         <div class="py-5 text-center">
             <img class="d-block mx-auto mb-4" src="https://energie-experte-ck.de/img/Logo.png" alt="" width="57"
                 height="57">
@@ -19,12 +15,5 @@
             </svg>
         </div>
     
-    </main>
     
-
-
-    <!--#include file="/includes/footer.html" -->
-</body>
-
-
-</html>
+{% endblock %}

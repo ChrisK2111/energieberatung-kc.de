@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, session, send_file, request
+from flask_mail import Mail, Message
 import random
 import json
 from datetime import datetime
@@ -8,6 +9,14 @@ from py.sfp_app import calc_sfp, final_cond_card, sfp_cards, initial_cond_card
 app = Flask(__name__,static_url_path='',
             static_folder='static',)
 app.secret_key = 'a#130u#98bm_23j30_bas9'
+
+app.config['MAIL_SERVER'] = 'smtp.strato.de'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'info@energieberatung-kc.de'
+app.config['MAIL_PASSWORD'] = 'chrzebrzeszczyna'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 @app.route('/mountain')
 def mountain():
@@ -74,7 +83,48 @@ def send_sfp_data():
 
 @app.route('/kontakt')
 def kontakt():
+    init_session()
     return render_template('kontakt/index.html')
+
+@app.route('/kontakt', methods=['POST'])
+def contact_form_submitted():
+
+    session['contact_form_submitted'] = True
+    for key in request.form.keys():
+            ext_key = "contact_form_" + key
+            session[ext_key] = request.form.get(key);
+    
+    # JSON-String in JSON-Datei schreiben
+    with open(file_path, 'a') as file:
+        json.dump(session, file)
+        file.write('\n')
+    # send_mail()
+
+    return render_template('kontakt/success.html')
+
+
+def send_mail():
+    msg = Message("Anfrage erhalten", sender="info@energieberatung-kc.de", recipients=[session['contact_form_email']])
+    msg.body = "Guten Tag " + session['contact_form_firstName'] + " " + session['contact_form_lastName'] + ",\n"\
+                "vielen Dank für Ihre Anfrage. Ich werde mich umgehend bei Ihnen melden.\n" \
+                "\n"\
+                "Mit freundlichen Grüßen\n"\
+                "Christian Karczewski" 
+    mail.send(msg)
+
+    msg = Message("Anfrage erhalten", sender="info@energieberatung-kc.de", recipients=["christian.karczewski@yahoo.de"])
+    msg.body = "Guten Tag Christian Karczewski, \n" \
+                "es ist eine neue Anfrage von " + session['contact_form_firstName'] + " " + session['contact_form_lastName'] + " aus " + session['contact_form_city'] + " eingegangen.\n"\
+                "Die Emailadresse lautet: " + session['contact_form_email'] + "\n" \
+                "Die Nachricht lautet:\n" \
+                "--------------------- \n" + \
+                session["contact_form_message"] + "\n" \
+                "---------------------\n\n" + \
+                "Mit freundlichen Grüßen\n" \
+                "Christian Karczewski" 
+    mail.send(msg)
+
+    return "Sent Mail"
 
 def init_session():
     if not('ids' in session):
