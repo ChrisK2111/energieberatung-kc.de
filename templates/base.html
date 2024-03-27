@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-100">
 
 <head>
     <meta charset="utf-8">
@@ -28,7 +28,7 @@
     </style>
 </head>
 
-<body>
+<body class="d-flex flex-column h-100">
 
     
     <header class="navbar navbar-expand-sm bd-navbar sticky-top bg-light">
@@ -69,11 +69,11 @@
     <main>
         {% block content %}
         {% endblock %}
+        
     </main>
 
-    <footer>
-        <div class="container-fluid bg-light">
-            <div class="row justify-content-start py-2">
+    <footer class="footer mt-auto py-2 bg-light">
+            <div class="row justify-content-start ">
                 <div class="col-6">
                     <a style="text-decoration: none; color: var(--bs-navbar-brand-color)" href="https://energie-experte-ck.de">
                         <img src="https://energie-experte-ck.de/img/Logo.png" alt="Logo" width="40" height="40" class="d-inline-block align-text-middle">
@@ -103,7 +103,6 @@
                 </div>
             </div>
             
-        </div>
     </footer>
 
 </body>

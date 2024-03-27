@@ -27,10 +27,6 @@ def mountain():
 def specific_mountain(mt):
     return "This is a big mountain: " + str(mt)
 
-@app.route('/py/firstAPI')
-def firstAPI():
-    data = {'message': 'Hello, World!'}
-    return jsonify(data)
 
 @app.route('/')
 def index():
@@ -125,6 +121,8 @@ def send_mail():
     mail.send(msg)
 
     return "Sent Mail"
+
+
 
 def init_session():
     if not('ids' in session):
