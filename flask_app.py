@@ -33,6 +33,18 @@ def index():
     init_session()
     return render_template('index.html')
 
+@app.route('/agb')
+def agb():
+    return render_template('legal/agb.html')
+
+@app.route('/dsgvo')
+def dsgvo():
+    return render_template('legal/dsgvo.html')
+
+@app.route('/impressum')
+def impressum():
+    return render_template('legal/impressum.html')
+
 @app.route('/sfp')
 def sfp():
     init_session()
