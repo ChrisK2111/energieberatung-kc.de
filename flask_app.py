@@ -106,7 +106,7 @@ def contact_form_submitted():
     with open(file_path, 'a') as file:
         json.dump(session, file)
         file.write('\n')
-    # send_mail()
+    send_mail()
 
     return render_template('kontakt/success.html')
 
